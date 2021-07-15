@@ -1,4 +1,5 @@
 
+const { response } = require('express')
 const express=require('express')
 const mongoose=require('mongoose')
 const Person = require('../models/User')
@@ -15,7 +16,7 @@ router.post('/',async (req,res)=>{
     try{ 
         const newperson=new Person(req.body);
         const result=await newperson.save();
-    res.send('the user is added succesfully"')}
+    res.send({result:result,message:'the user is added succesfully'})}
     catch(error){ res.status(400).send("can't save it")}
 })
 
@@ -34,6 +35,7 @@ router.delete('/:id',async (req,res)=>{
     try{
     let result= await Person.findOneAndDelete({_id:req.params.id});
         res.send({response:result,message:'the user is deleted succesfully'})
+        console.log(response)
     }
         catch(error){res.status(400).send("can not delet it")}
     })
@@ -41,7 +43,7 @@ router.delete('/:id',async (req,res)=>{
         router.put('/:id',async(req,res)=>{
             try{
             let result= await Person.findOneAndUpdate({_id:req.params.id},{ $set: { ...req.body } });
-                res.send(result)
+                res.send({result:result,message:"the user is updated"})
             }
             catch(error){res.status(400).send("can not update user")}})
     
